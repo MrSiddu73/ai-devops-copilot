@@ -97,9 +97,9 @@ Upcoming:
 ## 🗺️ Roadmap
 
 - [x] Project initialization
-- [ ] Backend foundation
+- [X] Backend foundation
 - [ ] Dockerization
-- [ ] PostgreSQL integration
+- [X] PostgreSQL integration
 - [ ] JWT authentication
 - [ ] Kubernetes module
 - [ ] AWS module
