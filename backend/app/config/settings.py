@@ -1,5 +1,7 @@
 from pathlib import Path
 
+from urllib.parse import quote_plus
+
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 BASE_DIR = Path(__file__).resolve().parents[3]
@@ -18,9 +20,22 @@ class Settings(BaseSettings):
     DB_USER: str
     DB_PASSWORD: str
 
+    @property
+    def DATABASE_URL(self) -> str:
+        return (
+            f"postgresql+psycopg://"
+            f"{quote_plus(self.DB_USER)}:{quote_plus(self.DB_PASSWORD)}"
+            f"@{self.DB_HOST}:{self.DB_PORT}"
+            f"/{self.DB_NAME}"
+        )
+    
+    
+
     model_config = SettingsConfigDict(
         env_file=BASE_DIR / ".env",
         case_sensitive=True,
     )
 
 settings = Settings()
+
+print(settings.DATABASE_URL)

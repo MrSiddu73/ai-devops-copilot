@@ -17,6 +17,7 @@ app = FastAPI(
 )
 
 print(f"DEBUG = {settings.DEBUG}")
+print(f"APP_ENV = {settings.APP_ENV}")
 
 from app.exceptions.handlers import register_exception_handlers
 

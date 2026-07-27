@@ -5,15 +5,9 @@ from sqlalchemy.orm import Session, sessionmaker
 
 from app.config.settings import settings
 
-DATABASE_URL = (
-    f"postgresql+psycopg://"
-    f"{settings.DB_USER}:{settings.DB_PASSWORD}"
-    f"@{settings.DB_HOST}:{settings.DB_PORT}"
-    f"/{settings.DB_NAME}"
-)
 
 engine = create_engine(
-    DATABASE_URL,
+    settings.DATABASE_URL,
     echo=False,
     pool_pre_ping=True,
 )
