@@ -5,6 +5,9 @@ from app.database.session import get_db
 from app.core.dependencies import get_current_user
 from app.database.models.user import User
 
+from app.core.authorization import require_role
+from app.enums.user_role import UserRole
+
 from app.schemas.user import (
     UserCreate,
     UserLogin,
@@ -61,3 +64,15 @@ def get_current_user_profile(
     current_user: User = Depends(get_current_user),
 ):
     return current_user
+
+@router.get(
+    "/admin",
+)
+def admin_dashboard(
+    current_user: User = Depends(
+        require_role(UserRole.ADMIN)
+    ),
+):
+    return {
+        "message": f"Welcome Admin {current_user.username}"
+    }

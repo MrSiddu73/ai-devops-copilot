@@ -5,6 +5,9 @@ from sqlalchemy.orm import Mapped, mapped_column ## Mapped => This Python attrib
 
 from app.database.base import Base
 
+from sqlalchemy import Enum
+
+from app.enums.user_role import UserRole
 
 class User(Base):
     __tablename__ = "users" ## Without __tablename__, SQLAlchemy wouldn't know what table this class represents.
@@ -37,3 +40,9 @@ class User(Base):
     String(255),
     nullable=False,
     )
+
+    role: Mapped[UserRole] = mapped_column(
+    Enum(UserRole),
+    default=UserRole.VIEWER,
+    nullable=False,
+)

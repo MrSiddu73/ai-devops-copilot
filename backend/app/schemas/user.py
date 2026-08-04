@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Literal
 from typing import Optional
-
+from app.enums.user_role import UserRole
 from pydantic import BaseModel, ConfigDict, EmailStr
 
 
@@ -23,6 +23,7 @@ class UserResponse(BaseModel):
     id: int
     username: str
     email: EmailStr
+    role: UserRole
     created_at: datetime
 
     model_config = ConfigDict(from_attributes=True)
