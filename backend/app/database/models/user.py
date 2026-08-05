@@ -1,5 +1,5 @@
 from datetime import datetime
-
+from sqlalchemy.orm import relationship
 from sqlalchemy import DateTime, Integer, String
 from sqlalchemy.orm import Mapped, mapped_column ## Mapped => This Python attribute is mapped to a database column." and mapped_column => It integrates better with typing and is the modern API.
 
@@ -45,4 +45,16 @@ class User(Base):
     Enum(UserRole),
     default=UserRole.VIEWER,
     nullable=False,
-)
+    )
+
+    created_incidents = relationship(
+    "Incident",
+    foreign_keys="Incident.created_by",
+    back_populates="creator",
+    )
+
+    assigned_incidents = relationship(
+        "Incident",
+        foreign_keys="Incident.assigned_to",
+        back_populates="assignee",
+    )
