@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from sqlalchemy import (
+    DateTime,
     ForeignKey,
     Integer,
     String,
@@ -64,6 +65,19 @@ class Incident(Base):
     assigned_to: Mapped[int | None] = mapped_column(
         ForeignKey("users.id"),
         nullable=True,
+    )
+
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime,
+        default=datetime.utcnow,
+        nullable=False,
+    )
+
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime,
+        default=datetime.utcnow,
+        onupdate=datetime.utcnow,
+        nullable=False,
     )
 
     creator = relationship(
