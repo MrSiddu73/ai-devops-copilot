@@ -1,7 +1,8 @@
 from sqlalchemy.orm import Session
 
 from app.database.models.incident import Incident
-
+from app.enums.incident_status import IncidentStatus
+from app.enums.incident_severity import IncidentSeverity
 
 class IncidentRepository:
 
@@ -29,9 +30,27 @@ class IncidentRepository:
     def get_all_incidents(
         self,
         db: Session,
+        status: IncidentStatus | None = None,
+        severity: IncidentSeverity | None = None,
+        assigned_to: int | None = None,
+        skip: int = 0,
+        limit: int = 20,
     ) -> list[Incident]:
+
+        query = db.query(Incident)
+
+        if status is not None:
+            query = query.filter(Incident.status == status)
+
+        if severity is not None:
+            query = query.filter(Incident.severity == severity)
+
+        if assigned_to is not None:
+            query = query.filter(Incident.assigned_to == assigned_to)
         return (
-            db.query(Incident)
+            query
+            .offset(skip)
+            .limit(limit)
             .all()
         )
 

@@ -4,6 +4,9 @@ from sqlalchemy.orm import Session
 from app.core.dependencies import get_current_user
 from app.database.models.user import User
 from app.database.session import get_db
+from fastapi import APIRouter, Depends, Query, status   
+from app.enums.incident_status import IncidentStatus
+from app.enums.incident_severity import IncidentSeverity
 
 from app.schemas.incident import (
     IncidentCreate,
@@ -40,10 +43,29 @@ def create_incident(
     response_model=list[IncidentResponse],
 )
 def get_all_incidents(
+    status: IncidentStatus | None = None,
+    severity: IncidentSeverity | None = None,
+    assigned_to: int | None = None,
+    skip: int = Query(
+        0,
+        ge=0,
+    ),
+    limit: int = Query(
+        20,
+        ge=1,
+        le=100,
+    ),
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
-    return incident_service.get_all_incidents(db)
+    return incident_service.get_all_incidents(
+        db,
+        status=status,
+        severity=severity,
+        assigned_to=assigned_to,
+        skip=skip,
+        limit=limit,
+    )
 
 @router.get(
     "/{incident_id}",

@@ -10,7 +10,8 @@ from app.schemas.incident import (
 )
 
 from fastapi import HTTPException, status
-
+from app.enums.incident_status import IncidentStatus
+from app.enums.incident_severity import IncidentSeverity
 
 class IncidentService:
 
@@ -59,9 +60,21 @@ class IncidentService:
     def get_all_incidents(
         self,
         db: Session,
+        status: IncidentStatus | None = None,
+        severity: IncidentSeverity | None = None,
+        assigned_to: int | None = None,
+        skip: int = 0,
+        limit: int = 20,
     ) -> list[Incident]:
 
-        return self.incident_repository.get_all_incidents(db)
+        return self.incident_repository.get_all_incidents(
+            db,
+            status=status,
+            severity=severity,
+            assigned_to=assigned_to,
+            skip=skip,
+            limit=limit,
+        )
 
     def update_incident(
         self,

@@ -8,7 +8,7 @@ from app.repositories.user_repository import UserRepository
 from app.core.jwt import verify_access_token
 
 oauth2_scheme = OAuth2PasswordBearer(
-    tokenUrl="/users/login",
+    tokenUrl="/api/v1/users/token",
 )
 
 

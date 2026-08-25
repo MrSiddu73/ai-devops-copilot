@@ -7,6 +7,7 @@ from app.database.models.user import User
 
 from app.core.authorization import require_role
 from app.enums.user_role import UserRole
+from fastapi.security import OAuth2PasswordRequestForm
 
 from app.schemas.user import (
     UserCreate,
@@ -76,3 +77,26 @@ def admin_dashboard(
     return {
         "message": f"Welcome Admin {current_user.username}"
     }
+
+@router.post(
+    "/token",
+    response_model=Token,
+)
+def login_for_access_token(
+    form_data: OAuth2PasswordRequestForm = Depends(),
+    db: Session = Depends(get_db),
+):
+    login_data = UserLogin(
+        email=form_data.username,
+        password=form_data.password,
+    )
+
+    access_token = user_service.login_user(
+        db,
+        login_data,
+    )
+
+    return Token(
+        access_token=access_token,
+        token_type="bearer",
+    )
