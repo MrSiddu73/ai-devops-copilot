@@ -12,6 +12,7 @@ from app.schemas.incident import (
     IncidentCreate,
     IncidentResponse,
     IncidentUpdate,
+    IncidentListResponse,
 )
 
 from app.services.incident_service import IncidentService
@@ -40,7 +41,7 @@ def create_incident(
 
 @router.get(
     "/",
-    response_model=list[IncidentResponse],
+    response_model=IncidentListResponse,
 )
 def get_all_incidents(
     status: IncidentStatus | None = None,
@@ -58,11 +59,19 @@ def get_all_incidents(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
-    return incident_service.get_all_incidents(
-        db,
-        status=status,
-        severity=severity,
-        assigned_to=assigned_to,
+
+    incidents, total = incident_service.get_all_incidents(
+    db,
+    status=status,
+    severity=severity,
+    assigned_to=assigned_to,
+    skip=skip,
+    limit=limit,
+)
+
+    return IncidentListResponse(
+        items=incidents,
+        total=total,
         skip=skip,
         limit=limit,
     )

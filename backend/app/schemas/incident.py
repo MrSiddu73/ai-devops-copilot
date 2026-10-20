@@ -24,6 +24,10 @@ class IncidentResponse(BaseModel):
     created_at: datetime
     updated_at: datetime
     model_config = ConfigDict(from_attributes=True)
+    items: list[IncidentResponse]
+    total: int
+    skip: int
+    limit: int
 
 
 class IncidentUpdate(BaseModel):
@@ -32,3 +36,9 @@ class IncidentUpdate(BaseModel):
     severity: Optional[IncidentSeverity] = None
     status: Optional[IncidentStatus] = None
     assigned_to: Optional[int] = None
+
+class IncidentListResponse(BaseModel):
+    items: list[IncidentResponse]
+    total: int
+    skip: int
+    limit: int

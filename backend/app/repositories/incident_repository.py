@@ -35,24 +35,35 @@ class IncidentRepository:
         assigned_to: int | None = None,
         skip: int = 0,
         limit: int = 20,
-    ) -> list[Incident]:
+    ) -> tuple[list[Incident], int]:
 
         query = db.query(Incident)
 
         if status is not None:
-            query = query.filter(Incident.status == status)
+            query = query.filter(
+                Incident.status == status
+            )
 
         if severity is not None:
-            query = query.filter(Incident.severity == severity)
+            query = query.filter(
+                Incident.severity == severity
+            )
 
         if assigned_to is not None:
-            query = query.filter(Incident.assigned_to == assigned_to)
-        return (
+            query = query.filter(
+                Incident.assigned_to == assigned_to
+            )
+
+        total = query.count()
+
+        incidents = (
             query
             .offset(skip)
             .limit(limit)
             .all()
         )
+
+        return incidents, total
 
     def update_incident(
         self,

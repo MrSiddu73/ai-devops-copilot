@@ -65,16 +65,19 @@ class IncidentService:
         assigned_to: int | None = None,
         skip: int = 0,
         limit: int = 20,
-    ) -> list[Incident]:
-
-        return self.incident_repository.get_all_incidents(
-            db,
-            status=status,
-            severity=severity,
-            assigned_to=assigned_to,
-            skip=skip,
-            limit=limit,
+    ):
+        incidents, total = (
+            self.incident_repository.get_all_incidents(
+                db,
+                status=status,
+                severity=severity,
+                assigned_to=assigned_to,
+                skip=skip,
+                limit=limit,
+            )
         )
+
+        return incidents, total
 
     def update_incident(
         self,
