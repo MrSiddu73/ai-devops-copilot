@@ -7,6 +7,7 @@ from app.database.session import get_db
 from fastapi import APIRouter, Depends, Query, status   
 from app.enums.incident_status import IncidentStatus
 from app.enums.incident_severity import IncidentSeverity
+from app.schemas.incident import IncidentCreate, IncidentResponse
 
 from app.schemas.incident import (
     IncidentCreate,
